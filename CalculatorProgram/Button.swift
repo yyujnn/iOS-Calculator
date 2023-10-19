@@ -7,7 +7,9 @@
 
 import Foundation
 
-// 버튼을 눌렀을 때 버튼 액션을 호출하도록 임시 버튼 생성
+// MARK: Device 임시 버튼 인터페이스 -> 버튼 메서드
+// 계산기 로직과 사용자 인터페이스 분리
+// 사용자 인터페이스는 버튼 클릭에 따라 해당 동작호출
 
 class Button: Input {
     let title: String

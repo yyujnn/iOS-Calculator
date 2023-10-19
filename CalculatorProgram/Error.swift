@@ -10,9 +10,8 @@ enum CalculationError: Error {
 }
 
 enum InputError: Error {
-    case invalidInput
+    case inputError
 }
-
 
 func tryingCalculate(calculate: () throws -> Void) {
     do {
@@ -24,14 +23,6 @@ func tryingCalculate(calculate: () throws -> Void) {
     }
 }
 
-
-func tryingInput(inputButton: () throws -> Void) {
-    do {
-        try inputButton()
-    } catch InputError.invalidInput {
-        print("입력할 수 있는 형식이 아닙니다.")
-    } catch {
-        print("에러 발생: \(error)")
-    }
+func tryingInput() throws {
+    throw InputError.inputError
 }
-

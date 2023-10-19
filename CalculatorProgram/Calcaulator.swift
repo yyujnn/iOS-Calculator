@@ -9,10 +9,15 @@ import Foundation
 class DecimalCalculator: Calculator {
     
     var isCalculatable: Bool = true
-    var number = Stack<Double>() // 숫자 저장 스택
-    var operatorCode = Stack<String>() // 연산자 저장 스택
-    var insertNumber = "" // 현재 입력 숫자
-    var viewNumber = "0" // 사용자 보여지는 숫자
+    var number = Stack<Double>()        // 숫자 저장 스택
+    var operatorCode = Stack<String>()  // 연산자 저장 스택
+    var insertNumber = ""               // 현재 입력 숫자
+    var viewNumber = "0"                // 사용자 보여지는 숫자
+    
+    var lastOperatorCode: String?       // =
+    var isConsecutiveEquals = false     // = 여러번 입력
+    var initNum: String = ""
+    
     
     var binaryOperationFunctions: [String: BinaryOperator] = [:]
     var unaryOperationFunctions: [String: UnaryOperator] = [:]
@@ -27,7 +32,8 @@ class DecimalCalculator: Calculator {
         unaryOperationFunctions["+/-"] = NegationOperator()
     }
     
-    // <Stack>
+    // MARK: - Stack
+    
     func reset() {
         number.clear()
         operatorCode.clear()
@@ -39,7 +45,7 @@ class DecimalCalculator: Calculator {
         if insertNumber.isEmpty {
             // 입력중인 숫자 x (연산자 입력 가정)
             if !operatorCode.isEmpty() {
-                operatorCode.pop()
+                operatorCode.removeLast()
                 // 연산자 삭제
             }
         } else {
@@ -59,13 +65,14 @@ class DecimalCalculator: Calculator {
     
     // 사용자에게 보여주는 숫자
     // 1. 숫자입력 -> 입력한 숫자
-    // 2. 연산자 or = 입력 -> 연산 값으로 upeate
+    // 2. 연산자 or = 입력 -> 연산 값으로 update
     func updatedViewNumber() {
         guard let lastNumber = number.top() else { return }
         viewNumber = lastNumber.formatResult()
     }
     
-    // <Calculate>
+    // MARK: - Calculation
+    
     func calculate() throws {
         guard let operatorSign = operatorCode.pop(),
               let operationFunction = binaryOperationFunctions[operatorSign],
@@ -73,6 +80,7 @@ class DecimalCalculator: Calculator {
               let firstNumber = number.pop() else {
             return
         }
+        
         if operatorSign == "÷" && secondNumber == 0 {
                 throw CalculationError.divisionByZero
             }
@@ -82,7 +90,7 @@ class DecimalCalculator: Calculator {
     }
     
     // 연산자 우선순위
-    func getPriority(_ code: String) -> Int? {
+    private func getPriority(_ code: String) -> Int? {
         switch code {
         case "+", "-":
             return 1
@@ -94,10 +102,9 @@ class DecimalCalculator: Calculator {
     }
     
     func calculateRule(code: String) {
-        
         // 연산자 중복 검사 추가
         if insertNumber.isEmpty && !operatorCode.isEmpty() && operatorCode.top() != code {
-                operatorCode.pop()  // 중복 연산자 교체
+                operatorCode.removeLast()  // 중복 연산자 교체
             }
         
         pushNumber()
@@ -120,13 +127,9 @@ class DecimalCalculator: Calculator {
         
     }
     
-    var lastOperatorCode: String?
-    var isConsecutiveEquals = false
-    var initNum: String = ""
-    
     func inputEqualButton() {
 
-        // 두번째 숫자 없이 = 입력
+        // 두번째 숫자 없이 "=" 입력
         if insertNumber.isEmpty && !operatorCode.isEmpty(){
             if let lastResult = number.top() {
                 insertNumber = lastResult.formatResult()
@@ -135,25 +138,18 @@ class DecimalCalculator: Calculator {
             }
         }
         
-        //= 버튼 연속으로 눌릴 때 이전 결과와 연산자로 연산
-       if isConsecutiveEquals && operatorCode.isEmpty() {
-            operatorCode.push(lastOperatorCode! )
-            insertNumber = initNum
-            pushNumber()
-        }
-        
-        /*
-        // = 버튼 연속으로 눌릴 때 이전 결과와 연산자로 연산
+        // "=" 버튼 연속으로 눌릴 때 이전 결과와 연산자로 연산
          if isConsecutiveEquals && operatorCode.isEmpty() {
              if let lastOperator = lastOperatorCode {
                  operatorCode.push(lastOperator)
                  insertNumber = initNum
                  pushNumber()
              } else {
-                 return  // lastOperatorCode가 nil일 때 종료
+                 return
              }
          }
-        */
+
+        // 숫자 입력 후 "=" 입력
         pushNumber()
         
         // 남은 연산자 처리
@@ -171,6 +167,7 @@ class DecimalCalculator: Calculator {
         isConsecutiveEquals = true
     }
     
+    
     func concatNumber(_ title: String) {
         if insertNumber.count < 9 {
             insertNumber += title
@@ -187,6 +184,7 @@ class DecimalCalculator: Calculator {
         }
     }
     
+    // 단항 연산자 메서드
     func calculateUnary(code: String) {
         guard let operation = unaryOperationFunctions[code],
               let currentNumber = Double(insertNumber) else {

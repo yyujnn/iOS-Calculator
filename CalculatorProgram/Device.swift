@@ -5,6 +5,7 @@
 
 import Foundation
 
+
 class Device: DecimalCalculator {
     
     func inputButton(title: String) {
@@ -30,7 +31,14 @@ class Device: DecimalCalculator {
         case "+/-":
             calculateUnary(code: "+/-")
         default:
-            insertNumber = "input error"
+            do {
+                try tryingInput()
+               } catch InputError.inputError {
+                   insertNumber = "input error"
+                   print("입력할 수 있는 형식이 아닙니다.")
+               } catch {
+                   print("에러 발생: \(error)")
+               }
         }
     }
 }

@@ -25,6 +25,10 @@ struct Stack<T> {
     mutating func clear() {
         items.removeAll()
     }
+    
+    mutating func removeLast() {
+       items.removeLast()
+   }
 
     func top() -> T? {
         return items.last

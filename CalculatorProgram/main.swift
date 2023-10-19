@@ -5,7 +5,7 @@
 
 import Foundation
 
-// [기본 연산자 테스트]
+// MARK: - 기본 연산자 테스트
 
 func testAdd() -> String {
     let calculator = Device()
@@ -91,15 +91,15 @@ func testClear() -> String {
     calculator.inputButton(title: "+")
     calculator.inputButton(title: "5")
     calculator.inputButton(title: "+")
-    calculator.inputButton(title: "8")
-//    calculator.inputButton(title: "+") //18
+    calculator.inputButton(title: "3")
     calculator.inputButton(title: "C")
+    calculator.inputButton(title: "5")
     calculator.inputButton(title: "=")
     return calculator.viewNumber
 }
 
 let clear = testClear()
-print("clear: \(clear)") // 10
+print("clear: \(clear)") // 15
 
 func testAC() -> String {
     let calculator = Device()
@@ -117,15 +117,17 @@ let ac = testAC()
 print("ac: \(ac)") // 0
 
 
-// [연산자 우선순위 및 상태표시 테스트]
+// MARK: - 연산자 우선순위 및 상태표시 테스트
 
-// 사칙연산 우선순위에 따른 연산 가능
-// 5 x 6 + 2 = 32
-// 5 + 6 x 2 = 17
+/*
+ 사칙연산 우선순위에 따른 연산 가능
+ 5 x 6 + 2 = 32
+ 5 + 6 x 2 = 17
 
-// 사칙연산을 눌렀을 때 연산된 값에 대해 출력(스택에 저장)
-// 5 x 6 x → 30
-// 5 + 6 + → 11
+ 사칙연산을 눌렀을 때 연산된 값에 대해 출력(스택에 저장)
+ 5 x 6 x → 30
+ 5 + 6 + → 11
+*/
 
 func test1() -> String {
     let calculator = Device()
@@ -196,7 +198,7 @@ let multiple = testMultiple()
 print("multiple: \(multiple)") // 73.6
 
 
-// [Error 발생 테스트]
+// MARK: - Error 발생 테스트
 
 func charTest() -> String {
     let calculator = Device()
