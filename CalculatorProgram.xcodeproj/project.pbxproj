@@ -86,14 +86,14 @@
 			isa = PBXGroup;
 			children = (
 				8828CD8F2ADF516100662958 /* main.swift */,
-				8828CDB12ADF9EE900662958 /* Calcaulator.swift */,
-				8828CDB82ADFBF2900662958 /* Device.swift */,
 				8828CDA32ADF51E300662958 /* Protocol.swift */,
 				8828CDA72ADF520C00662958 /* Operator.swift */,
-				8828CDA92ADF522100662958 /* Button.swift */,
-				8828CDAB2ADF523F00662958 /* Extension.swift */,
-				8828CDAD2ADF524C00662958 /* Stack.swift */,
 				8828CDAF2ADF526500662958 /* Error.swift */,
+				8828CDA92ADF522100662958 /* Button.swift */,
+				8828CDAD2ADF524C00662958 /* Stack.swift */,
+				8828CDB82ADFBF2900662958 /* Device.swift */,
+				8828CDB12ADF9EE900662958 /* Calcaulator.swift */,
+				8828CDAB2ADF523F00662958 /* Extension.swift */,
 			);
 			path = CalculatorProgram;
 			sourceTree = "<group>";

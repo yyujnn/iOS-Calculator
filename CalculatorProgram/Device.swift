@@ -6,7 +6,7 @@
 import Foundation
 
 
-class Device: DecimalCalculator {
+class Device: DecimalCalculator, CalculatorDevice {
     
     func inputButton(title: String) {
         switch title {
@@ -32,7 +32,7 @@ class Device: DecimalCalculator {
             calculateUnary(code: "+/-")
         default:
             do {
-                try tryingInput()
+                try errorManager.tryingInput()
                } catch InputError.inputError {
                    insertNumber = "input error"
                    print("입력할 수 있는 형식이 아닙니다.")

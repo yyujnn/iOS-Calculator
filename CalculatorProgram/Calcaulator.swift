@@ -18,9 +18,11 @@ class DecimalCalculator: Calculator {
     var isConsecutiveEquals = false     // = 여러번 입력
     var initNum: String = ""
     
+    let errorManager = ErrorManager()
     
     var binaryOperationFunctions: [String: BinaryOperator] = [:]
     var unaryOperationFunctions: [String: UnaryOperator] = [:]
+
     
     init() {
         binaryOperationFunctions["+"] = AdditionOperator()
@@ -83,7 +85,7 @@ class DecimalCalculator: Calculator {
         
         if operatorSign == "÷" && secondNumber == 0 {
                 throw CalculationError.divisionByZero
-            }
+        }
         
         let result = operationFunction.operate(firstNumber, secondNumber)
         number.push(result)
@@ -104,8 +106,8 @@ class DecimalCalculator: Calculator {
     func calculateRule(code: String) {
         // 연산자 중복 검사 추가
         if insertNumber.isEmpty && !operatorCode.isEmpty() && operatorCode.top() != code {
-                operatorCode.removeLast()  // 중복 연산자 교체
-            }
+            operatorCode.removeLast()  // 원래 있던 연산자 삭제
+        }
         
         pushNumber()
 
@@ -113,11 +115,11 @@ class DecimalCalculator: Calculator {
             return  // 우선순위 가져올 수 없을 때
         }
 
-        // 스택 가장 위 연산자와 현재 연산자 비교
+        // 스택 가장 위 연산자와 현재 연산자 비교 (연속된 연산자 우선순위 관리)
         while let topOperator = operatorCode.top(),
               let topPriority = getPriority(topOperator),
               currentPriority <= topPriority {
-            tryingCalculate {
+            errorManager.tryingCalculate {
                 try calculate()
             }
             // ex) +가 입력됐다면 원래 있던 x 연산 우선 진행
@@ -151,10 +153,11 @@ class DecimalCalculator: Calculator {
 
         // 숫자 입력 후 "=" 입력
         pushNumber()
+
         
-        // 남은 연산자 처리
+        // 남은 연산자 처리 -> 처리해주기 위해 while
         while !operatorCode.isEmpty() {
-            tryingCalculate {
+            errorManager.tryingCalculate {
                 try calculate()
             }
         }

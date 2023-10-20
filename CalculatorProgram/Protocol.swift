@@ -27,7 +27,7 @@
  [기능 상세]
  연산자 여러번 선택시 마지막 연산자로 계산
  입력 숫자 길이 9자리 제한
- "=" 게속 입력시 연속 연산
+ "=" 계속 입력시 연속 연산
 
  [아이폰 계산기]
  AC +- % ÷
@@ -52,7 +52,7 @@ protocol Calculator: Calculatable, CalculatorData {
     func calculate () throws
 }
 
-protocol CalculatorDevice {
+protocol CalculatorDevice: Calculator {
     func inputButton(title: String)
 }
 

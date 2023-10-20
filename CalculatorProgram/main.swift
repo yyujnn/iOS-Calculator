@@ -241,7 +241,7 @@ func testEqual() -> String {
     let calculator = Device()
     calculator.inputButton(title: "5")
     calculator.inputButton(title: "x")
-    calculator.inputButton(title: "=")
+    calculator.inputButton(title: "=") // 25
     calculator.inputButton(title: "=") // 125
     calculator.inputButton(title: "=") // 625
     return calculator.viewNumber
